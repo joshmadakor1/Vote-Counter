@@ -1,2 +1,4 @@
 key.py
 .DS_Store
+nodemodules
+__pycache__/
