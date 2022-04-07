@@ -1,9 +1,13 @@
 from googleapiclient.discovery import build
 from key import developerKey
+from datetime import date
 import json
 
+today = date.today()
+file = open(f'./votes/votes-{today}.json', "w")
 voters = []
 votes = {}
+summary = {}
 videoId = "Zu8qMuhsEso" # <- Current video you want to count votes for
 
 def countVotes(voters, votes, apiKey, videoId):
@@ -42,7 +46,7 @@ def countVotes(voters, votes, apiKey, videoId):
                 continue 
 
             # Keep track of new voter
-            voters.append({"authorChannel" : authorUrl, "author": authorName, "likes": likeCount, "symbol":symbol, "reason": reason, "date": date})
+            voters.append({"voterChannel" : authorUrl, "voter": authorName, "likes": likeCount, "symbol":symbol, "reason": reason, "date": date})
             if symbol not in votes:
                 votes[symbol] = 0
 
@@ -51,6 +55,7 @@ def countVotes(voters, votes, apiKey, videoId):
         break
 
 countVotes(voters, votes, developerKey, videoId)
-
-print(json.dumps(voters))
-print(json.dumps(votes))
+summary["date"] = f'{today}'
+summary["votesSummary"] = votes
+summary["voters"] = voters
+file.write(json.dumps(summary))
