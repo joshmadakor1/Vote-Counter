@@ -1,9 +1,10 @@
 from googleapiclient.discovery import build
 from key import developerKey
+import json
 
-voters = {}
+voters = []
 votes = {}
-videoId = "Zu8qMuhsEso"
+videoId = "Zu8qMuhsEso" # <- Current video you want to count votes for
 
 def countVotes(voters, votes, apiKey, videoId):
     # creating youtube resource object
@@ -24,14 +25,14 @@ def countVotes(voters, votes, apiKey, videoId):
             likeCount = item['snippet']['topLevelComment']['snippet']['likeCount']
             date = item['snippet']['topLevelComment']['snippet']['publishedAt']
             symbol = None
-            explanation = None
+            reason = None
 
             # Check if the person is attempting to vote with the template
             if comment[0:7].lower() == "symbol:":
                 symbol = comment.split(':')[1].split('<')[0].strip()
                 
                 # Remove encoding for singe quote
-                explanation = (comment.split('<br>')[1]).replace("&#39;", "'")
+                reason = (comment.split('<br>')[1]).replace("&#39;", "'")
             else:
                 # If the comment isn't using the voting template, continue
                 continue
@@ -41,14 +42,15 @@ def countVotes(voters, votes, apiKey, videoId):
                 continue 
 
             # Keep track of new voter
-            voters[authorUrl] = (f'{authorName}|{symbol}|{explanation}|{date}')
+            voters.append({"authorChannel" : authorUrl, "author": authorName, "likes": likeCount, "symbol":symbol, "reason": reason, "date": date})
             if symbol not in votes:
                 votes[symbol] = 0
 
+            # Count all the comment likes as votes
             votes[symbol] += (1 + likeCount)
         break
 
 countVotes(voters, votes, developerKey, videoId)
 
-print(voters)
-print("Votes: ", votes)
+print(json.dumps(voters))
+print(json.dumps(votes))

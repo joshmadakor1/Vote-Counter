@@ -2,3 +2,4 @@ key.py
 .DS_Store
 nodemodules
 __pycache__/
+scratch.json
