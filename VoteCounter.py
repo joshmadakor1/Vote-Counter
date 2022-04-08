@@ -57,5 +57,7 @@ def countVotes(voters, votes, apiKey, videoId):
 countVotes(voters, votes, developerKey, videoId)
 summary["date"] = f'{today}'
 summary["votesSummary"] = votes
-summary["voters"] = voters
+summary["votesActual"] = voters
 file.write(json.dumps(summary))
+
+# sijia
