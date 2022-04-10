@@ -59,5 +59,3 @@ summary["date"] = f'{today}'
 summary["votesSummary"] = votes
 summary["votesActual"] = voters
 file.write(json.dumps(summary))
-
-# sijia
